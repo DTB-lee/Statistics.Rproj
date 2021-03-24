@@ -1,0 +1,37 @@
+## for identifying class of each column
+library(purrr)
+wnba <- read_csv("Data/wnba.csv")
+library(readr)
+wnba <- read_csv("Data/wnba.csv")
+library(dplyr)
+list_class <- map(wnba, class)
+print(list_class)
+df_class <- map_df(wnba, class)
+df_class
+library(tibble)
+wnba <- wnba %>%
+mutate(minutes_stratum = cut(MIN, breaks = 3))
+set.seed(1)
+sample_mean <- function(x) {
+sample <- wnba %>%
+group_by(minutes_stratum) %>%
+sample_frac(.07)
+mean(sample$PTS)
+}
+sample_number <- 1:100
+mean_points_season <- map_dbl(sample_number, sample_mean)
+df <- tibble(sample_number, mean_points_season)
+ggplot(data = df) +
+aes(x = sample_number, y = mean_points_season) +
+geom_point() +
+geom_hline(yintercept = mean(wnba$PTS), color = "blue") +
+ylim(80, 320)
+library(ggplot2)
+ggplot(data = df) +
+aes(x = sample_number, y = mean_points_season) +
+geom_point() +
+geom_hline(yintercept = mean(wnba$PTS), color = "blue") +
+ylim(80, 320)
+install.packages(farver)
+library(farver)
+install.packages("farver")

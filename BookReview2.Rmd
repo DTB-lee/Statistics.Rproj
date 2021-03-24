@@ -1,0 +1,93 @@
+---
+title: "BookReviewMission2"
+author: "Sunmin"
+date: "3/1/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+library(tidyverse)
+library(readr)
+```
+
+## Loading data
+
+Look at columns and details:
+
+```{r, echo=TRUE}
+sales2019 <- read_csv("Data/sales2019.csv")
+glimpse(sales2019)
+unique(sales2019$title)
+is.na(sales2019$user_submitted_review)
+is.na(sales2019$total_purchased)
+unique(sales2019$customer_type)
+
+```
+
+## Remove all rows in the dataset that have an NA value for the user_submitted_review column.
+
+```{r}
+sales2019 <- sales2019 %>% 
+  filter(!is.na(user_submitted_review))
+mean(sales2019$total_purchased, na.rm = TRUE)
+```
+##Fill all of the missing values in total_purchased with the average value
+```{r}
+sales2019 <- sales2019 %>% 
+  mutate(total_purchased2=if_else(is.na(total_purchased==TRUE), 4, total_purchased))
+```
+##Examine the unique sentences that are present in in user_submitted_review
+```{r}
+unique(sales2019$user_submitted_review)
+library(stringr)
+is_positive <- function(review) {
+  review_positive = case_when(
+  str_detect(review, "Awesome") ~ TRUE,
+  str_detect(review, "OK") ~ TRUE,
+  str_detect(review, "okay") ~ TRUE,
+  str_detect(review, "Never") ~ TRUE,
+  str_detect(review, "a lot") ~ TRUE,
+  TRUE ~ FALSE # The review did not contain any of the above phrases
+  )
+}
+sales2019 <- sales2019 %>% 
+  mutate(
+    is_positive2 = unlist(map(user_submitted_review, is_positive))
+  )
+
+```
+## formatting date
+```{r}
+library(lubridate)
+sales2019 <- sales2019 %>% 
+  mutate(date2=mdy(date))
+```
+## grouping column
+```{r}
+sales2019 <- sales2019 %>% 
+  mutate(group=if_else(date2 < "2019-07-01","pre","post")
+  )
+SummaryByGroup <- sales2019 %>% 
+  group_by(group) %>% 
+  summarise(TotalBooks=sum(total_purchased2)
+           )
+SummaryByGroup 
+CustomerAndDate <- sales2019 %>% 
+  group_by(group, customer_type) %>% 
+  summarise(T_books=sum(total_purchased2))
+CustomerAndDate
+
+ReviewSummary <- sales2019 %>% 
+  group_by(group) %>% 
+  summarise(posReview=sum(is_positive2))
+```

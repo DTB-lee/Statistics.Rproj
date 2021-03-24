@@ -1,0 +1,354 @@
+install.packages("ggplot2")
+library(ggplot2)
+library(readr)
+wnba <- read_csv("Data/wnba.csv")
+library(dplyr)
+#
+wnba <- wnba %>%
+mutate(minutes_stratum = cut(MIN, breaks = 3))
+set.seed(1)
+sample_mean <- function(x) {
+sample <- wnba %>%
+group_by(minutes_stratum) %>%
+sample_frac(.07)
+mean(sample$PTS)
+}
+sample_number <- 1:100
+mean_points_season <- map_dbl(sample_number, sample_mean)
+library(purrr)
+mean_points_season <- map_dbl(sample_number, sample_mean)
+df <- tibble(sample_number, mean_points_season)
+ggplot(data = df) +
+aes(x = sample_number, y = mean_points_season) +
+geom_point() +
+geom_hline(yintercept = mean(wnba$PTS), color = "blue") +
+ylim(80, 320)
+set.seed(10)
+clusters <- unique(wnba$Team)%>%
+sample(size=4)
+sample<-wnba%>%
+filter(Team %in% clusters)
+sample
+clusters
+sampling_error_height <- mean(wnba$Height) - mean(sample$Height)
+sampling_error_games <- mean(wnba$Games_Played) - mean(sample$Games_Played)
+sampling_error_points <- mean(wnba$PTS) - mean(sample$PTS)
+sampling_error_height
+sampling_error_age
+sampling_error_games
+sampling_error_points
+library(tidyr)
+glimpse(wnba)
+str(wnba)
+wnba%>%
+group_by(Height) %>%
+summarise(Freq=n())%>%
+arrange(desc(Height))
+wnba%>%
+group_by(Height) %>%
+summarise(Freq=n())%>%
+arrange(desc(Freq))
+wnba%>%
+group_by(Age) %>%
+summarise(age=n())%>%
+arrange(desc(age))
+wnba%>%
+group_by(Age) %>%
+summarise(Freq=n())%>%
+arrange(desc(age))
+age_ascending <- wnba %>%
+group_by(Age) %>%
+summarize(Freq = n())
+wnba%>%
+group_by(Age) %>%
+summarise(Freq=n())%>%
+arrange(desc(Age))
+age_ascending <- wnba %>%
+group_by(Age) %>%
+summarize(Freq = n())
+#stratifying by height
+wnba <- wnba%>%
+mutate(height_labels <- case_when(
+Height<=170 ~"short",
+Height>170 & Height<=180 ~"medium",
+Height>180 ~"tall")
+)
+wnba <- wnba%>%
+select(Height, height_labels)%>%
+head(10)
+wnba%>%
+select(Height, height_labels)%>%
+head(10)
+wnba <- wnba%>%
+mutate(height_labels <- case_when(
+Height<=170 ~"short",
+Height>170 & Height<=180 ~"medium",
+Height>180 ~"tall")
+)
+wnba%>%
+select(Height, height_labels)%>%
+head(10)
+#stratifying by height
+wnba <- wnba%>%
+mutate(height_labels = case_when(
+Height<=170 ~"short",
+Height>170 & Height<=180 ~"medium",
+Height>180 ~"tall")
+)
+wnba%>%
+select(Height, height_labels)%>%
+head(10)
+wnba%>%
+group_by(height_labels)%>%
+summarise(freq=n())%>%
+arrange(desc(height_labels))
+wnba%>%
+group_by(height_labels)%>%
+summarise(freq=n())
+wnba %>%
+group_by(Height_labels) %>%
+summarize(Freq = n()) %>%
+arrange(factor(Height_labels,
+levels = height_levels))
+#ordinal or define as a factor
+height_levels <- c("short", "medium", "tall")
+wnba %>%
+group_by(Height_labels) %>%
+summarize(Freq = n()) %>%
+arrange(factor(Height_labels,
+levels = height_levels))
+age_25 <- wnba%>%
+filter(Age==25)%>%
+summarize(Freq=n())%>%
+mutate(Prop = Freq/nrow(wnba))%>%
+mutate(Percentage = Freq/nrow*100)
+age_25 <- wnba%>%
+filter(Age==25)%>%
+summarize(Freq=n())%>%
+mutate(Prop = Freq/nrow(wnba))
+age_25
+age_25 <- wnba%>%
+filter(Age==25)%>%
+summarize(Freq=n())%>%
+mutate(Prop = Freq/nrow(wnba))%>%
+mutate(Percentage = Freq/nrow(wnba)*100)
+age_25
+age_23_or_under <- wnba%>%
+filter(Age<=23)%>%
+summarize(Freq=n())%>%
+mutate(Prop = Freq/nrow(wnba))%>%
+mutate(Percentage = Freq/nrow(wnba)*100)
+age_23_or_under
+age_30_or_older <- wnba%>%
+filter(Age>=30)%>%
+summarize(Freq=n())%>%
+mutate(Prop = Freq/nrow(wnba))%>%
+mutate(Percentage = Freq/nrow(wnba)*100)
+age_30_or_older
+library(readr)
+library(dplyr)
+wnba <- read_csv("Data/wnba.csv")
+wnba %>%
+mutate(cume_dist_age = cume_dist(Age)) %>%
+select(Name, Age, cume_dist_age) %>%
+head (n=15)
+age_upper_quartile <- quantile(wnba$Age, probs=0.75)
+age_upper_quartile
+age_middle_quartile <- quantile(wnba$Age, probs=0.5)
+age_middle_quartile
+quantile(wnba$Age, probs = 0.95)
+wnba_age_percentiles<-wnba %>%
+mutate(cume_dist_age = cume_dist(Age))%>%
+select(Name, Age, cume_dist_age)%>%
+arrange(Age)
+wnba_age_percentiles
+wnba%>%
+mutate(weight_categories =
+cut(Weight, breaks = 10, dig.lab = 4))%>%
+group_by(weight_categories)%>%
+summarise(Freq = n())%>%
+drop_na()
+#make categories and count frequency
+library(tidyr)
+wnba%>%
+mutate(weight_categories =
+cut(Weight, breaks = 10, dig.lab = 4))%>%
+group_by(weight_categories)%>%
+summarise(Freq = n())%>%
+drop_na()
+wnba<-wnba%>%
+mutate(points_categories = cut(PTS, breaks=10, dig.lab=4))
+pts_freq_table <- wnba%>%
+group_by(PTS)%>%
+summarize(Freq=n())
+wnba
+pts_grouped_freq_table <- wnba%>%
+group_by(points_categories)%>%
+mutate(Percentage=Freq/nrow(wnba)*100)%>%
+arrange(desc(points_categories))
+pts_freq_table <- wnba%>%
+group_by(points_categories)%>%
+summarize(Freq=n())
+pts_freq_table <- wnba%>%
+group_by(points_categories)%>%
+summarize(Freq=n())
+wnba<-wnba%>%
+mutate(points_categories = cut(PTS, breaks=10, dig.lab=4))
+pts_freq_table <- wnba%>%
+group_by(points_categories)%>%
+summarize(Freq=n())
+pts_freq_table <- wnba%>%
+group_by(PTS)%>%
+summarize(counts=n())
+pts_grouped_freq_table <- wnba%>%
+group_by(points_categories)%>%
+mutate(Percentage=counts/nrow(wnba)*100)%>%
+arrange(desc(points_categories))
+wnba <- wnba %>%
+mutate(points_categories = cut(PTS, breaks = 10, dig.lab = 4))
+pts_freq_table <- wnba %>%
+group_by(PTS) %>%
+summarize(Freq = n())
+pts_grouped_freq_table <- wnba %>%
+group_by(points_categories) %>%
+summarize(Freq = n()) %>%
+mutate(Percentage = Freq / nrow(wnba) * 100) %>%
+arrange(desc(points_categories))
+pts_grouped_freq_table
+pts_freq_table
+wnba <- wnba %>%
+mutate(min_categories = cut(MIN, breaks = 10, dig.lab = 4))
+wnba %>%
+group_by(min_categories) %>%
+summarize(Freq = n())
+wnba <- wnba %>%
+mutate(min_categories = cut(MIN, breaks = 20, dig.lab = 4))
+wnba %>%
+group_by(min_categories) %>%
+summarize(Freq = n())
+wnba <- wnba %>%
+mutate(min_categories =
+cut(MIN,
+breaks = c(0, 150, 300, 450, 600, 750, 900, 1050),
+dig.lab = 4))
+min_grouped_freq_table <- wnba %>%
+group_by(min_categories) %>%
+summarize(Freq = n()) %>%
+mutate(Percentage = Freq / nrow(wnba) * 100)
+min_grouped_freq_table
+sum(wnba$Height == 175)
+library(ggplot2)
+library(readr)
+read_csv(wnba.csv)
+read_csv("wnba.csv")
+wnba <- read_csv("Data/wnba.csv")
+library(dplyr)
+library(ggplot2)
+pos_prop <- wnba %>%
+group_by(Pos) %>%
+summarize(Prop = n() / nrow(wnba))
+pos_prop
+ggplot(data = pos_prop,
+aes(x = "", y = Prop, fill = Pos)) +
+geom_bar(stat = "identity", width = 0.25) +
+coord_flip() +
+geom_text(aes(label = str_c(round(Prop * 100), "%")),
+position = position_stack(vjust = 0.5)) +
+labs(x = NULL,
+y = NULL,
+fill = NULL,
+title = "Player Distribution by Position") +
+theme_classic() +
+theme(axis.line = element_blank(),
+axis.text = element_blank(),
+axis.ticks = element_blank())
+library(stringr)
+install.packages(stringr)
+install.packages("stringr")
+library(stringr)
+ggplot(data = pos_prop,
+aes(x = "", y = Prop, fill = Pos)) +
+geom_bar(stat = "identity", width = 0.25) +
+coord_flip() +
+geom_text(aes(label = str_c(round(Prop * 100), "%")),
+position = position_stack(vjust = 0.5)) +
+labs(x = NULL,
+y = NULL,
+fill = NULL,
+title = "Player Distribution by Position") +
+theme_classic() +
+theme(axis.line = element_blank(),
+axis.text = element_blank(),
+axis.ticks = element_blank())
+ggplot(data = pos_prop,
+aes(x = "",
+y = Prop,
+fill = Pos)) +
+geom_bar(stat = "identity") +
+coord_polar(theta = "y")
+exp_prop <-
+wnba %>%
+group_by(Exp_ordinal) %>%
+summarize(Prop = n() / nrow(wnba))
+#histograms
+pts_binwidth <- (max(wnba$PTS) - min(wnba$PTS)) / 10
+ggplot(data = wnba,
+aes(x = PTS)) +
+geom_histogram(boundary = min(wnba$PTS),
+binwidth = pts_binwidth) +
+scale_x_continuous(breaks = seq(0, 600, by = 50))
+wnba <- wnba %>%
+mutate(games_categories = cut(Games_Played, breaks = 10, dig.lab = 4))
+wnba %>%
+group_by(games_categories) %>%
+summarize(Freq = n())
+ggplot(data = wnba,
+aes(x = Games_Played)) +
+geom_histogram(boundary = min(wnba$Games_Played),
+binwidth = games_binwidth) +
+scale_x_continuous(breaks = seq(0, 35, by = 5))
+games_binwidth <- (max(wnba$Games_Played) - min(wnba$Games_Played)) / 10
+ggplot(data = wnba,
+aes(x = Games_Played)) +
+geom_histogram(boundary = min(wnba$Games_Played),
+binwidth = games_binwidth) +
+scale_x_continuous(breaks = seq(0, 35, by = 5))
+ggplot(data=wnba, aes(x=AST))+
+geom_histogram()
+ggplot(data=wnba, aes(x=FT_perc))+
+geom_histogram()
+ggplot(data=wnba, aes(x=FT%))+
+geom_histogram()
+ggplot(data = wnba,
+aes(x = BMI)) +
+geom_histogram(bins = 15)
+install.packages("survival")
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(survival)
+MDSCdat <- read_csv("~/Documents/15-C-0160/15C0160 CPI cohort for R/MDSC.csv")
+View(MDSCdat)
+MDSCdat <- MDSCdat%>%
+p_eMDSC_2 <- as.double(MDSCdat$p_eMDSC_2, rm.na=TRUE)
+MDSCdat$p_eMDSC_2 <- as.double(MDSCdat$p_eMDSC_2, rm.na=TRUE)
+str(MDSCdat)
+library(readr)
+wnba <- read_csv("Data/wnba.csv")
+library(dplyr)
+library(ggplot2)
+set.seed(1)
+under_12 <- wnba %>%
+filter(Games_Played<=12) %>%
+sample_n(1)
+btw_13_22 <- wnba %>%
+filter(Games_Played > 12 & Games_Played<=22) %>%
+sample_n(2)
+over_22 <- wnba %>%
+filter(Games_Played > 22) %>%
+sample_n(7)
+combined <- bind_rows(under_12, btw_13_22, over_22) %>%
+mean(combined$PTS)
+combined <- bind_rows(under_12, btw_13_22, over_22)
+mean(combined$PTS)
+getwd()

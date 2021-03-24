@@ -1,0 +1,18 @@
+library(readr)
+install.packages("readr")
+library("readr")
+library(readr)
+install.packages("readr")
+install.packages("hms")
+library(readr)
+readr(~/R_files/DataQueset_learning/Statistics/Data/"wnba.csv")
+library(readr)
+wnba <- read_csv("Data/wnba.csv")
+View(wnba)
+# wnba <- readr("~/R_files/DataQueset_learning/Statistics/Data/wnba.csv")
+set.seed(1)
+wnba <- wnba %>%
+mutate(pts_game=PTS/Games_Played)
+library(dplyr
+)
+install.packages("dplyr")

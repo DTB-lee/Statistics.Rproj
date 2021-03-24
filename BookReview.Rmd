@@ -1,0 +1,62 @@
+---
+title: "BookReview Project"
+author: "Sunmin"
+date: "2/6/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Book Review Project
+
+This is an R Markdown document for Dataquest book_review project
+
+```{r}
+library(readr)
+library(dplyr)
+book_review <- read_csv(file = "Data/book_reviews.csv", col_names = TRUE)
+
+```
+
+
+## Data clean up 
+
+You can also embed plots, for example:
+
+```{r}
+dim(book_review)
+colnames(book_review)
+glimpse(book_review)
+book_review1 <- book_review %>% 
+  filter(!is.na(review))
+
+book_review1 <- book_review1 %>% 
+  mutate(abstate = if_else(state == "New York", "NY", state)) %>% 
+  mutate(abstate=if_else(state == "Florida", "FL", abstate)) %>% 
+  mutate(abstate=if_else(state == "Texas", "TX", abstate)) %>% 
+  mutate(abstate=if_else(state == "California", "CA", abstate))
+book_review1 <- book_review1 %>% 
+  mutate(review_num =case_when(review=="Poor" ~ 1,
+                   review=="Fair" ~ 2,
+                   review=="Good" ~ 3,
+                   review=="Great" ~ 4,
+                   review=="Excellent" ~ 5))   
+book_review1 <- book_review1 %>% 
+  mutate(is_high_review = if_else(review_num>=4, TRUE, FALSE))
+```
+
+
+## total sales summary
+
+``` {r}
+book_price <- book_review1 %>% 
+  group_by(book, price) %>% 
+  summarise(price_book=n())
+
+Total_perbook <- book_price %>% 
+  mutate(total=price*price_book) %>% 
+  arrange(desc(total))
+```
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

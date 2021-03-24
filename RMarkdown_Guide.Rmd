@@ -1,0 +1,88 @@
+---
+title: "R Markdown Guide"
+author: "Sunmin"
+date: "1/31/2021"
+output: 
+ html_document:
+    toc: true
+# output: pdf_document
+# output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+## Text Formatting Basics
+### Headers`# First Level Header``## Second Level Header``### Third Level Header`***
+
+# First Level Header
+
+## Second Level Header
+
+### Third Level Header
+
+### Bulleted or Numbered Lists
+ * List element 1
+ * List element 2
+ * List element 3
+  * List element 3a
+  * List element 3b
+  
+Numbered Lists:
+
+ 1. Numbered list 1
+ 1. Numbered list 2
+ 1. Numbered list 3. The numbers auto-increment, have to worry about numbering!!!
+ 
+ Numbered and unordered lists combined:
+ 1. Numbered list 1
+ 1. numbered list 2
+  * Item 1
+  * Item 2
+  
+  
+### Text Formatting
+* Make text italic like *this* or _this_. 
+* Make text bold like **this** or __this__.
+* Use `backticks` for code.
+* Wrap a character to subscript in tildes (`~`). For example, `H~2~O` renders as H~2~O.
+* Wrap a character to superscript in carets (`^`), like this: `R^2^` renders as R^2^. 
+
+## Links
+Direct in-line links: <https://rmarkdown.rstudio.com/>.
+
+Phrase links: RStudio's [R Markdown page](https://rmarkdown.rstudio.com/).
+
+![R Markdown image](https://www.dataquest.io/wp-content/uploads/2020/06/r-markdown-1536x976.jpg)
+
+## Inline Code
+
+The `cars` dataset contains `r nrow(cars)` rows and `r ncol(cars)` columns.
+
+## Tables
+
+```{r}
+knitr::kable(head(cars),
+             caption = "The First Few Rows of the Cars Dataset")
+```

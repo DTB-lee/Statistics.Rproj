@@ -1,0 +1,47 @@
+---
+title: "Forestfires"
+author: "Sunmin"
+date: "3/13/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Importing data
+
+
+```{r}
+library(tidyverse)
+library(readr)
+library(ggplot2)
+forestfires <- read_csv("data/forestfires.csv")
+glimpse(forestfires)
+forestfires <- forestfires %>% 
+  mutate(month=factor(month, levels=c("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep"
+                                       "oct", "nov", "dec")))
+
+         day_cat=factor(day, levels = c("mon", "tue", "wed", "thu", "fri", "sat", "sun")))
+```
+
+## No of forest fires by month
+
+You can also embed plots, for example:
+
+```{r}
+fires_byMonth <- forestfires %>% 
+  group_by(month_cat) %>% 
+  summarise(freq=nrow())
+fires_byDay <- forestfires %>% 
+  group_by(day_cat) %>% 
+  summarise(freq=nrow())
+fires_byMonth %>% 
+  ggplot(aes(x=month_cat))+
+  geom_bar()
+fires_byDay %>% 
+  ggplot(aes(x=day_cat))+
+  geom_bar()
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

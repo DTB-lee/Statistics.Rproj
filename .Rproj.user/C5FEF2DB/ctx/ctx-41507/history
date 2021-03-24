@@ -1,0 +1,79 @@
+install.packages(c("cli", "colorspace", "cpp11", "lubridate", "magrittr", "pillar", "RcppArmadillo", "rprojroot", "rstudioapi", "vctrs", "waldo"))
+install.packages(c("cli", "colorspace", "lubridate", "magrittr", "pillar", "rmarkdown", "rprojroot", "rstudioapi", "vctrs"), lib="/Library/Frameworks/R.framework/Versions/4.0/Resources/library")
+install.packages("rmarkdown", lib="/Library/Frameworks/R.framework/Versions/4.0/Resources/library")
+install.packages("evaluate")
+install.packages("rmarkdown", lib="/Library/Frameworks/R.framework/Versions/4.0/Resources/library")
+install.packages("knitr")
+install.packages("rmarkdown", lib="/Library/Frameworks/R.framework/Versions/4.0/Resources/library")
+library(dplyr)
+install.packages("tidyselect")
+library(dplyr)
+install.packages("purrr")
+library(dplyr)
+# wnba <- readr("~/R_files/DataQueset_learning/Statistics/Data/wnba.csv")
+set.seed(1)
+wnba <- wnba %>%
+mutate(pts_game=PTS/Games_Played)
+wnba <- read_csv("Data/wnba.csv")
+wnba <- readr("Data/wnba.csv")
+library(readr)
+wnba <- readr("Data/wnba.csv")
+library(readr)
+wnba <- read_csv("Data/wnba.csv")
+View(wnba)
+wnba <- wnba %>%
+mutate(pts_game=PTS/Games_Played)
+View(wnba)
+wnba <- read_csv("Data/wnba.csv")
+wnba <- wnba %>%
+mutate(pts_game=PTS/Games_Played)
+head(wnbs)
+hed
+head(wnba)
+wnba$pts_game
+pts_gameSamples <- sample_n(wnba, size=10)
+head(pts_gameSamples)
+pts_gameSamples$pts_game
+total_points_estimates<-wnba%>%
+group_by(Pos) %>%
+sample_n(10) %>%
+summarise(mean_pts_game=mean(pts_game), mean_pts_season=mean(PTS))%>%
+arrange(Pos)
+total_points_estimates
+total_points_parameter<-wnba%>%
+group_by(Pos) %>%
+summarise(mean_pts_game=mean(pts_game), mean_pts_season=mean(PTS))%>%
+arrange(Pos)
+total_points_parameter
+wnba %>%
+mutate(games_stratum = cut(Games_Played, breaks = 3)) %>%
+group_by(games_stratum) %>%
+summarize(n = n()) %>%
+mutate(percentage = n / sum(n) * 100) %>%
+arrange(desc(percentage))
+wnba %>%
+mutate(games_stratum = cut(Games_Played, breaks = 3)) %>%
+group_by(games_stratum) %>%
+summarize(n = n())
+set.seed(1)
+under_12<- wnba%>%
+filter(Games_Played<=12)%>%
+sample_n(1)
+btw_13_22<- wnba%>%
+filter(Games_Played>12 & Games_Played<=22)%>%
+sample_n(2)
+over_22<- wnba%>%
+filter(Games_Played>22)%>%
+sample_n(7)
+combined <-bind_rows(under_12, btw_13_22, over_22)
+combined
+mean(combined$PTS)
+library(ggplot2)
+print(class(wnba[,name]))
+library(purrr)
+print(class(wnba[,name]))
+list_class <- map(wnba, class)
+print(list_class)
+list_class
+df_class <- map_df(wnba, class)
+install.packages("purrr")

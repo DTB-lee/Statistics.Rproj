@@ -1,0 +1,2 @@
+"0","sales2019 <- sales2019 %>% "
+"0","  mutate(total_purchased2=if_else(is.na(total_purchased==TRUE), 4, total_purchased))"

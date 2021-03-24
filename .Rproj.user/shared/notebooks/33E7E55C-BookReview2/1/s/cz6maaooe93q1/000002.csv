@@ -1,0 +1,7 @@
+"0","sales2019 <- sales2019 %>% "
+"0","  filter(!is.na(user_submitted_review))"
+"0","mean(sales2019$total_purchased, na.rm = TRUE)"
+"1","[1]"
+"1"," 3.985561"
+"1","
+"
